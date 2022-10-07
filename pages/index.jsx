@@ -1,10 +1,9 @@
-import type { NextPage } from "next";
 import React from "react";
 import styles from "../styles/Home.module.css";
 import { useDropzone } from "react-dropzone";
 
-const Home: NextPage = () => {
-  const [fileName, setFileName] = React.useState<string>("");
+const Home = () => {
+  const [fileName, setFileName] = React.useState("");
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: {

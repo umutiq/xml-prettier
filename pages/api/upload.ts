@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { promises as fs, createReadStream } from "fs";
-import path, { format } from "path";
+import { promises as fs } from "fs";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import XMLFormatter from "xml-formatter";
 import formidable, { File } from "formidable";
@@ -15,8 +14,6 @@ export const config = {
 type ProcessedFiles = Array<[string, File]>;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  let status = 200,
-    resultBody = { status: "ok", message: "Files were uploaded successfully" };
   const files = await new Promise<ProcessedFiles | undefined>(
     (resolve, reject) => {
       const form = new formidable.IncomingForm();
@@ -30,11 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   ).catch((e) => {
     console.log(e);
-    status = 500;
-    resultBody = {
-      status: "fail",
-      message: "Upload error",
-    };
   });
   if (files?.length) {
     for (let file of files) {
