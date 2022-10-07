@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 
 const Home = () => {
   const [fileName, setFileName] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: {
@@ -25,6 +26,7 @@ const Home = () => {
       alert("Please, select file you want to upload");
       return;
     }
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("file", acceptedFiles[0]);
     const response = await fetch("/api/upload", {
@@ -40,6 +42,7 @@ const Home = () => {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+    setIsLoading(false);
   };
 
   return (
@@ -49,7 +52,8 @@ const Home = () => {
         <p>
           {fileName
             ? fileName
-            : "Drag and drop some files here, or click to select files"}
+            : "Drag and drop some files here, or click to select files"}{" "}
+          {isLoading && <span>( Please wait while uploading.. )</span>}
         </p>
       </div>
     </section>
