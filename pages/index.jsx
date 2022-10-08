@@ -11,17 +11,7 @@ const Home = () => {
       "text/xml": [".xml"],
     },
   });
-
-  React.useEffect(() => {
-    if (acceptedFiles.length > 0) {
-      setFileName(acceptedFiles[0].path);
-      handleOnSubmit();
-    } else {
-      setFileName("");
-    }
-  }, [acceptedFiles]);
-
-  const handleOnSubmit = async () => {
+  const handleOnSubmit = React.useCallback(async () => {
     if (acceptedFiles.length === 0) {
       alert("Please, select file you want to upload");
       return;
@@ -43,11 +33,20 @@ const Home = () => {
     a.remove();
     URL.revokeObjectURL(url);
     setIsLoading(false);
-  };
+  }, [acceptedFiles]);
+
+  React.useEffect(() => {
+    if (acceptedFiles.length > 0) {
+      setFileName(acceptedFiles[0].path);
+      handleOnSubmit();
+    } else {
+      setFileName("");
+    }
+  }, [acceptedFiles, handleOnSubmit]);
 
   return (
     <section className={styles.container}>
-      <div {...getRootProps({ className: "dropzone disabled" })}>
+      <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
         <p>
           {fileName
